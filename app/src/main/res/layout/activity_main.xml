@@ -14,7 +14,7 @@
         android:background="@color/brick"
         android:gravity="center"
 
-        android:text="Welcome to the Anime Quizz Game !"
+        android:text="Welcome to Anime QUIZZ"
         android:textColor="#FFFF" />
 
     <Button
@@ -30,6 +30,5 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:text="Level 2" />
-    
 
 </LinearLayout>
