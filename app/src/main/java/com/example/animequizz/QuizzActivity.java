@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,15 +14,24 @@ import java.util.List;
 public class QuizzActivity extends AppCompatActivity {
     public  List<Anime> animeList =  new ArrayList<>();
 
+    Button response_A,response_B,response_C,response_D;
+    ImageView anime_image;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quizz);
+
         String username;
         int difficulty;
+         List<Anime> animeList = new ArrayList<>();
 
-        // start the async Anime list fetching
-        new AsyncAnimeJSONDataForList().execute("https://api.jikan.moe/v3/top/anime/1");
+        response_A = (Button) findViewById(R.id.response_A);
+        response_B = (Button) findViewById(R.id.response_B);
+        response_C = (Button) findViewById(R.id.response_C);
+        response_D = (Button) findViewById(R.id.response_D);
+        anime_image = (ImageView) findViewById(R.id.anime_image);
+
 
         //get the extra information sended through intent
         if (savedInstanceState == null) {
@@ -30,10 +42,18 @@ public class QuizzActivity extends AppCompatActivity {
             } else {
                 username= extras.getString("username");
                 difficulty = extras.getInt("difficulty");
+                /*
+                animeList = (List<Anime>) extras.getSerializable("animeList");
+                Log.i("test",animeList.get(0).name);
+
+                 */
             }
         } else {
             username= (String) savedInstanceState.getSerializable("username");
         }
+
+
+
 
     }
 }

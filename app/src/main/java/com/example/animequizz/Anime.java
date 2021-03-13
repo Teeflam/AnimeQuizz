@@ -1,6 +1,8 @@
 package com.example.animequizz;
 
-public class Anime {
+import java.io.Serializable;
+
+public class Anime implements Serializable {
     String name;
     String urlImage;
 
