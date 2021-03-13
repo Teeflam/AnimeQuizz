@@ -13,17 +13,18 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity {
     private String username;
     private TextView header;
     private static List<Anime> animeList = new ArrayList<>();
+    private List<Anime> animeList2 = new ArrayList<>();
 
 
     public static void setAnimeList(List<Anime> animeList){
         MainActivity.animeList = animeList;
         Log.i("test",MainActivity.animeList.get(0).name);
+
 
     }
 
@@ -50,33 +51,21 @@ public class MainActivity extends AppCompatActivity {
         header.setText("Welcome " + username + ", to the Anime Quiz Game" );
 
 
+        // start the async Anime list fetching
+        new AsyncAnimeJSONDataForList().execute("https://api.jikan.moe/v3/top/anime/1");
+
 
         // access to new activity quiz with the difficulty level
         button_d1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                // start the async Anime list fetching
-                try {
-                    new AsyncAnimeJSONDataForList().execute("https://api.jikan.moe/v3/top/anime/1").get();
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-
-
                     //create an intent to change activity
                     Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("difficulty", 1);
-
-                   // myIntent.putExtra("animeList", (Serializable) animeList);
-
-
-
+                    myIntent.putExtra("animeList", (Serializable) animeList);
 
                 MainActivity.this.startActivity(myIntent);
             }
@@ -85,8 +74,7 @@ public class MainActivity extends AppCompatActivity {
         button_d2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // start the async Anime list fetching
-                new AsyncAnimeJSONDataForList().execute("https://api.jikan.moe/v3/top/anime/1");
+
 
                 //go to another activity (list activity)
                 Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);

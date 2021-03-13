@@ -42,17 +42,17 @@ public class QuizzActivity extends AppCompatActivity {
             } else {
                 username= extras.getString("username");
                 difficulty = extras.getInt("difficulty");
-                /*
-                animeList = (List<Anime>) extras.getSerializable("animeList");
-                Log.i("test",animeList.get(0).name);
 
-                 */
+                animeList = (List<Anime>) extras.getSerializable("animeList");
+
             }
         } else {
             username= (String) savedInstanceState.getSerializable("username");
         }
 
-
+        for(int i = 0; i < 10 ; i++){
+            Log.i("test",animeList.get(i).name);
+        }
 
 
     }
