@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         button_d1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 //create an intent to change activity
                 Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
                 //put extras informations about username and level

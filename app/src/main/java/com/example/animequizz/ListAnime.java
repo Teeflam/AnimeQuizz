@@ -14,4 +14,8 @@ public class ListAnime {
     public List<Anime> getAnimeItem() {
         return animeItem;
     }
+
+    public void setAnimeItem(List<Anime> animeItem) {
+        this.animeItem = animeItem;
+    }
 }
