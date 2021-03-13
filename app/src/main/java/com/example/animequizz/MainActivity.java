@@ -59,28 +59,30 @@ public class MainActivity extends AppCompatActivity {
         button_d1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (animeList.size()!=0){
                     //create an intent to change activity
                     Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("difficulty", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
-
-                MainActivity.this.startActivity(myIntent);
+                    MainActivity.this.startActivity(myIntent);
+                }
             }
         });
 
         button_d2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                //go to another activity (list activity)
-                Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
-                myIntent.putExtra( "username",username);
-                myIntent.putExtra( "difficulty",2);
-                MainActivity.this.startActivity(myIntent);
+                if (animeList.size()!=0){
+                    //create an intent to change activity
+                    Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
+                    //put extras informations about username and level
+                    myIntent.putExtra("username", username);
+                    myIntent.putExtra("difficulty", 2);
+                    myIntent.putExtra("animeList", (Serializable) animeList);
+                    MainActivity.this.startActivity(myIntent);
+                }
             }
         });
     }
