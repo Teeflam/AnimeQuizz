@@ -2,7 +2,10 @@ package com.example.animequizz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -13,7 +16,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         header = (TextView) findViewById(R.id.header);
+        Button button_d1 = (Button) findViewById(R.id.stage_1);
+        Button button_d2 = (Button) findViewById(R.id.stage_2);
+
+        //get the extra information sended through intent
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -24,10 +32,30 @@ public class MainActivity extends AppCompatActivity {
         } else {
             username= (String) savedInstanceState.getSerializable("username");
         }
-        header.setText("Welcome " +username + ", to the Anime Quizz Game" );
+        header.setText("Welcome " + username + ", to the Anime Quiz Game" );
 
+        // access to new activity quiz with the difficulty level
+        button_d1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //create an intent to change activity
+                Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
+                //put extras informations about username and level
+                myIntent.putExtra( "username",username);
+                myIntent.putExtra( "difficulty",1);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
 
-
-
+        button_d2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //go to another activity (list activity)
+                Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
+                myIntent.putExtra( "username",username);
+                myIntent.putExtra( "difficulty",2);
+                MainActivity.this.startActivity(myIntent);
+            }
+        });
     }
 }
