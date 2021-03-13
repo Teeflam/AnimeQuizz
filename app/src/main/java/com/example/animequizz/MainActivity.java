@@ -13,12 +13,13 @@ import android.widget.TextView;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private String username;
     private TextView header;
     private static List<Anime> animeList = new ArrayList<>();
-    private List<Anime> animeList2 = new ArrayList<>();
+
 
 
     public static void setAnimeList(List<Anime> animeList){
@@ -51,13 +52,14 @@ public class MainActivity extends AppCompatActivity {
         header.setText("Welcome " + username + ", to the Anime Quiz Game" );
 
 
+        int randomeEasy = new Random().nextInt(2)+1;
         // start the async Anime list fetching
-        new AsyncAnimeJSONDataForList().execute("https://api.jikan.moe/v3/top/anime/1");
+        new AsyncAnimeJSONDataForList().execute("https://api.jikan.moe/v3/top/anime/"+randomeEasy);
 
 
         // access to new activity quiz with the difficulty level
         button_d1.setOnClickListener(new View.OnClickListener() {
-            @Override
+            @Override   
             public void onClick(View v) {
                 if (animeList.size()!=0){
                     //create an intent to change activity
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("difficulty", 1);
+                    myIntent.putExtra("score", 0);
+                    myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
                     MainActivity.this.startActivity(myIntent);
                 }
@@ -80,6 +84,8 @@ public class MainActivity extends AppCompatActivity {
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("difficulty", 2);
+                    myIntent.putExtra("score", 0);
+                    myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
                     MainActivity.this.startActivity(myIntent);
                 }
