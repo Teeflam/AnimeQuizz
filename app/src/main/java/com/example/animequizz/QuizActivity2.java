@@ -12,6 +12,7 @@ public class QuizActivity2 extends AppCompatActivity {
     private String username;
     private int difficulty;
     private List<Anime> animeList = new ArrayList<>();
+    private int score;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +30,7 @@ public class QuizActivity2 extends AppCompatActivity {
             } else {
                 username= extras.getString("username");
                 difficulty = extras.getInt("difficulty");
+                score = extras.getInt("score");
                 animeList = (List<Anime>) extras.getSerializable("animeList");
             }
         } else {

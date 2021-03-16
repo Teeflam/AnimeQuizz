@@ -22,7 +22,7 @@ public class Authenticate extends AppCompatActivity {
             public void onClick(View v) {
                 //go to another activity (list activity)
                 username = (TextView) findViewById(R.id.username);
-                Intent myIntent = new Intent(Authenticate.this, MainActivity.class);
+                Intent myIntent = new Intent(Authenticate.this, ListGenre.class);
                 myIntent.putExtra( "username",username.getText().toString());
                 Authenticate.this.startActivity(myIntent);
             }
