@@ -2,13 +2,19 @@ package com.example.animequizz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -19,8 +25,11 @@ public class QuizzActivity extends AppCompatActivity {
     private int score;
     private int questionNb;
     private List<Anime> animeList = new ArrayList<>();
+    private int randomAnime;
     Button response_A,response_B,response_C,response_D;
     ImageView anime_image;
+    TextView tvUsername,tvScore,tvQuestionNb;
+    Intent quizzActivity;
 
     public void initInfo(Bundle savedInstanceState){
         if (savedInstanceState == null) {
@@ -59,22 +68,104 @@ public class QuizzActivity extends AppCompatActivity {
 
         initInfo(savedInstanceState);
 
-        TextView tvUsername = (TextView) findViewById(R.id.username);
-        TextView tvScore = (TextView) findViewById(R.id.score);
-        TextView tvQuestionNb = (TextView) findViewById(R.id.questionNb);
+        tvUsername = (TextView) findViewById(R.id.username);
+        tvScore = (TextView) findViewById(R.id.score);
+        tvQuestionNb = (TextView) findViewById(R.id.questionNb);
 
         tvUsername.setText(username);
-        tvScore.setText(String.valueOf(score));
-        tvQuestionNb.setText(String.valueOf(questionNb));
+        tvScore.setText(String.valueOf("score:"+score));
+        tvQuestionNb.setText("question : " +String.valueOf(questionNb));
 
+        Randomizer();
+        response_A.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(response_A.getText() == animeList.get(randomAnime).name){
+                    score++;
+                    questionNb++;
+                    quizzActivity = getIntent();
+                    quizzActivity.putExtra("score", score);
+                    quizzActivity.putExtra("questionNb", questionNb);
+                    finish();
+                    startActivity(getIntent());
+                }else{
+                    questionNb++;
+                    quizzActivity = getIntent();
+                    quizzActivity.putExtra("score", score);
+                    quizzActivity.putExtra("questionNb", questionNb);
+                    finish();
+                    startActivity(getIntent());
+                }
+            }
+        });
+        response_B.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(response_B.getText() == animeList.get(randomAnime).name){
+                    questionNb++;
+                    score++;
+                    quizzActivity = getIntent();
+                    nextQuestion(quizzActivity,score,questionNb);
+                }else{
+                    questionNb++;
+                    quizzActivity = getIntent();
+                    nextQuestion(quizzActivity,score,questionNb);
+                }
 
-        int randomAnime = new Random().nextInt(49);
+            }
+        });
+        response_C.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(response_C.getText() == animeList.get(randomAnime).name){
+                    score++;
+                    questionNb++;
+                    quizzActivity = getIntent();
+                    nextQuestion(quizzActivity,score,questionNb);
+                }else{
+                    questionNb++;
+                    quizzActivity = getIntent();
+                    nextQuestion(quizzActivity,score,questionNb);
+                }
+            }
+        });
+        response_D.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(response_D.getText() == animeList.get(randomAnime).name){
+                    score++;
+                    questionNb++;
+                    quizzActivity = getIntent();
+                    nextQuestion(quizzActivity,score,questionNb);
+                }else{
+                    questionNb++;
+                    quizzActivity = getIntent();
+                    nextQuestion(quizzActivity,score,questionNb);
+                }
+
+            }
+        });
+
+    }
+
+    public void Randomizer(){
+        randomAnime = new Random().nextInt(49);
         new AsyncBitmapDownloader(anime_image).execute(animeList.get(randomAnime).urlImage);
 
-       // List<Integer> listOfAnswer = List.(randomAnime,new Random().nextInt(49),new Random().nextInt(49),new Random().nextInt(49));
-        response_A.setText(animeList.get(randomAnime).name);
-        response_B.setText(animeList.get(new Random().nextInt(49)).name);
-        response_C.setText(animeList.get(new Random().nextInt(49)).name);
-        response_D.setText(animeList.get(new Random().nextInt(49)).name);
+        List<Integer> listOfAnswer = Arrays.asList(randomAnime,new Random().nextInt(49),new Random().nextInt(49),new Random().nextInt(49));
+        Collections.shuffle(listOfAnswer);
+
+        response_A.setText(animeList.get(listOfAnswer.get(0)).name);
+        response_B.setText(animeList.get(listOfAnswer.get(1)).name);
+        response_C.setText(animeList.get(listOfAnswer.get(2)).name);
+        response_D.setText(animeList.get(listOfAnswer.get(3)).name);
+    }
+
+    public void nextQuestion(Intent actual,int score, int nbQuestion){
+        quizzActivity.putExtra("score", score);
+        quizzActivity.putExtra("questionNb", nbQuestion);
+        finish();
+        startActivity(getIntent());
     }
 }
