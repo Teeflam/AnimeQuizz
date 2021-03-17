@@ -79,6 +79,7 @@ public class ListGenre extends AppCompatActivity {
 
             Button button = (Button) convertView.findViewById(R.id.button);
             final String genre = vector.get(position).getGenreName();
+            final int genreID = vector.get(position).getGenreNum();
             button.setText(genre);
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -86,6 +87,7 @@ public class ListGenre extends AppCompatActivity {
                     Intent myIntent = new Intent(ListGenre.this, MainActivity.class);
                     myIntent.putExtra( "username",username);
                     myIntent.putExtra( "genre",genre);
+                    myIntent.putExtra( "genreID",genreID);
                     ListGenre.this.startActivity(myIntent);
                 }
             });

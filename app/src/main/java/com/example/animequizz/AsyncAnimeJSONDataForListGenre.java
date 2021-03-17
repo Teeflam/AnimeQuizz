@@ -18,6 +18,7 @@ import java.util.List;
 
 public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, List<PresentationGenre>> {
     private ListGenre.MyAdapter adapter;
+    private static final int NB_GENRE = 10;
 
     public AsyncAnimeJSONDataForListGenre(ListGenre.MyAdapter adapter) {
         this.adapter = adapter;
@@ -31,7 +32,7 @@ public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, List<
         String stringUrl;
         JSONObject jsonObject = null;
 
-        for (int i=1;i<30;i++) {
+        for (int i=1;i<NB_GENRE+1;i++) {
 
             stringUrl = params[0]+i+"/1";
             Log.i("item 0:", stringUrl);
@@ -48,7 +49,7 @@ public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, List<
                         urlImage = jsonObject.getJSONArray("anime").getJSONObject(index).getString("image_url");
                     }
                     urlList.add(urlImage);
-                    genreList.add(new PresentationGenre(urlImage,genreName));
+                    genreList.add(new PresentationGenre(genreName,urlImage,i));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
