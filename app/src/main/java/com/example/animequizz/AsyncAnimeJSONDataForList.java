@@ -61,8 +61,6 @@ public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObjec
                 String name = items.getJSONObject(i).getString("title");
                 String imageUrl = items.getJSONObject(i).getString("image_url");
                 animeList.add(new Anime(name, imageUrl));
-                Log.i("JFL", name);
-                Log.i("JFL", imageUrl);
             }
         MainActivity.setAnimeList(animeList);
         } catch (JSONException e) {

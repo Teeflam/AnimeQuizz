@@ -162,9 +162,9 @@ public class QuizzActivity extends AppCompatActivity {
         response_D.setText(animeList.get(listOfAnswer.get(3)).name);
     }
 
-    public void nextQuestion(Intent actual,int score, int nbQuestion){
+    public void nextQuestion(Intent actual,int score, int questionNb){
         quizzActivity.putExtra("score", score);
-        quizzActivity.putExtra("questionNb", nbQuestion);
+        quizzActivity.putExtra("questionNb", questionNb);
         finish();
         startActivity(getIntent());
     }

@@ -110,7 +110,7 @@ public class ListGenre extends AppCompatActivity {
             return convertView;
         }
         public void dd(PresentationGenre pg){
-            Log.i("JFL", "Adding to adapter url : " + pg.getImageUrl() +" "+pg.getGenreName());
+            //Log.i("JFL", "Adding to adapter url : " + pg.getImageUrl() +" "+pg.getGenreName());
 
             vector.add(pg);
         }

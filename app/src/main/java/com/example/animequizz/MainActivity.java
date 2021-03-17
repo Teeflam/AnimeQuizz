@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (animeList.size()!=0){
                     //create an intent to change activity
-                    Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
+                    Intent myIntent = new Intent(MainActivity.this, QuizActivity2.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("difficulty", 2);
