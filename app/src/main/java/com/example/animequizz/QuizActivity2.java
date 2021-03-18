@@ -30,14 +30,15 @@ public class QuizActivity2 extends AppCompatActivity {
     private int score;
     private int questionNb;
     private List<Anime> animeList = new ArrayList<>();
-    private List<String> a = new ArrayList<>();
-    private TextView tvUsername,tvScore,tvQuestionNb;
-    private ImageView anime_Image_A,anime_Image_B,anime_Image_C,anime_Image_D;
+
+    private TextView tvUsername, tvScore, tvQuestionNb;
+    private ImageView anime_Image_A, anime_Image_B, anime_Image_C, anime_Image_D;
     private Button validation;
 
-    private String out;
+    private List<Anime> fourAnime = new ArrayList<>();
+    private String response_A, response_B, response_C, response_D;
 
-    private Spinner snipper_A,snipper_B,snipper_C,snipper_D;
+    private Spinner snipper_A, snipper_B, snipper_C, snipper_D;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +51,8 @@ public class QuizActivity2 extends AppCompatActivity {
         tvQuestionNb = (TextView) findViewById(R.id.questionNb);
 
         tvUsername.setText(username);
-        tvScore.setText(String.valueOf("score:"+score));
-        tvQuestionNb.setText("question : " +String.valueOf(questionNb));
+        tvScore.setText(String.valueOf("score:" + score));
+        tvQuestionNb.setText("question : " + String.valueOf(questionNb));
 
         snipper_A = (Spinner) findViewById(R.id.snipper_A);
         snipper_B = (Spinner) findViewById(R.id.snipper_B);
@@ -65,26 +66,24 @@ public class QuizActivity2 extends AppCompatActivity {
 
         validation = (Button) findViewById(R.id.validation);
 
+        fourAnime = randomAnime(animeList);
 
 
-
-
-        // (@resource) android.R.layout.simple_spinner_item:
         //   The resource ID for a layout file containing a TextView to use when instantiating views.
         //    (Layout for one ROW of Spinner)
         ArrayAdapter<String> adapterA = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,
-                Randomizer(anime_Image_A));
+                Randomizer(anime_Image_A,0));
         ArrayAdapter<String> adapterB = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,
-                Randomizer(anime_Image_B));
+                Randomizer(anime_Image_B,1));
         ArrayAdapter<String> adapterC = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,
-                Randomizer(anime_Image_C));
+                Randomizer(anime_Image_C,2));
 
         ArrayAdapter<String> adapterD = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,
-                Randomizer(anime_Image_D));
+                Randomizer(anime_Image_D,3));
 
         // Layout for All ROWs of Spinner.  (Optional for ArrayAdapter).
         adapterA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -104,6 +103,7 @@ public class QuizActivity2 extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 onItemSelectedHandler(parent, view, position, id);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -115,6 +115,7 @@ public class QuizActivity2 extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 onItemSelectedHandler(parent, view, position, id);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -126,6 +127,7 @@ public class QuizActivity2 extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 onItemSelectedHandler(parent, view, position, id);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -137,6 +139,7 @@ public class QuizActivity2 extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 onItemSelectedHandler(parent, view, position, id);
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
@@ -147,74 +150,91 @@ public class QuizActivity2 extends AppCompatActivity {
         validation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // if all 4 answers is correct
+                if(snipper_A.getSelectedItem().toString() == fourAnime.get(0).name &&
+                        snipper_B.getSelectedItem().toString() == fourAnime.get(1).name &&
+                        snipper_C.getSelectedItem().toString() == fourAnime.get(2).name &&
+                        snipper_D.getSelectedItem().toString() == fourAnime.get(3).name){
+                    score++;
+                }
+                questionNb++;
                 Intent quizActivity2 = getIntent();
+
                 quizActivity2.putExtra("score", score);
                 quizActivity2.putExtra("questionNb", questionNb);
                 finish();
                 startActivity(quizActivity2);
+
             }
         });
 
+
+        if(questionNb >5){
+            Intent myIntent = new Intent(QuizActivity2.this, Result.class);
+            myIntent.putExtra("username",username);
+            myIntent.putExtra("score", score);
+            myIntent.putExtra("questionNb", questionNb);
+            QuizActivity2.this.startActivity(myIntent);
+        }
+
     }
-/*
-FragmentManager fm = getSupportFragmentManager ();
-                FragmentTransaction fragmentTransaction = fm.beginTransaction();
 
-                Bundle arguments = new Bundle();
-                arguments.putString("username", username);
-
-                AnimeFragment fm2 = new AnimeFragment();
-                fm2.setArguments(arguments);
-
-                fragmentTransaction.replace(R.id.fragment1, fm2, null);
-                fragmentTransaction.commit();
- */
 
 
     private void onItemSelectedHandler(AdapterView<?> parent, View view, int position, long id) {
-        String item  = parent.getItemAtPosition(position).toString();
+        String item = parent.getItemAtPosition(position).toString();
     }
 
 
-
-    public void initInfo(Bundle savedInstanceState){
+    public void initInfo(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                username= null;
-                difficulty = 0;
+            if (extras == null) {
+                username = null;
                 animeList = null;
                 questionNb = 0;
                 score = 0;
 
             } else {
                 score = extras.getInt("score");
-                username= extras.getString("username");
-                difficulty = extras.getInt("difficulty");
+                username = extras.getString("username");
                 animeList = (List<Anime>) extras.getSerializable("animeList");
                 questionNb = extras.getInt("questionNb");
             }
         } else {
             username = (String) savedInstanceState.getSerializable("username");
-            difficulty = (int) savedInstanceState.getSerializable("difficulty");
             animeList = (List<Anime>) savedInstanceState.getSerializable("animeList");
         }
     }
-    public List<String> Randomizer(ImageView anime_Image){
-        List<String> spinner= new ArrayList<>();
-        int randomAnime = new Random().nextInt(49);
-        new AsyncBitmapDownloader( anime_Image).execute(animeList.get(randomAnime).urlImage);
 
-        List<Integer> listOfAnswer = Arrays.asList(randomAnime,new Random().nextInt(49),new Random().nextInt(49),new Random().nextInt(49));
+    public List<String> Randomizer(ImageView anime_Image,int number) {
+        List<String> spinner = new ArrayList<>();
+
+        new AsyncBitmapDownloader(anime_Image).execute(fourAnime.get(number).urlImage);
+
+        List<Integer> listOfAnswer = Arrays.asList(0,1,2,3);
         Collections.shuffle(listOfAnswer);
 
-        spinner.add(animeList.get(listOfAnswer.get(0)).name);
-        spinner.add(animeList.get(listOfAnswer.get(1)).name);
-        spinner.add(animeList.get(listOfAnswer.get(2)).name);
-        spinner.add(animeList.get(listOfAnswer.get(3)).name);
+        spinner.add(fourAnime.get(listOfAnswer.get(0)).name);
+        spinner.add(fourAnime.get(listOfAnswer.get(1)).name);
+        spinner.add(fourAnime.get(listOfAnswer.get(2)).name);
+        spinner.add(fourAnime.get(listOfAnswer.get(3)).name);
 
         return spinner;
     }
+
+    public List<Anime> randomAnime(List<Anime> animelist) {
+        List<Anime> listAnswer = new ArrayList<>();
+        if (animelist != null) {
+            for (int i = 0; i < 4; i++) {
+                int randomAnime = new Random().nextInt(animelist.size()-1);
+                listAnswer.add(new Anime(animelist.get(randomAnime).name, animelist.get(randomAnime).urlImage));
+            }
+        }
+        return listAnswer;
+    }
+
 
 
 
