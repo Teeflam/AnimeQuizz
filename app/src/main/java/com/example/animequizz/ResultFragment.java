@@ -12,14 +12,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
-public class AnimeFragment extends Fragment {
+public class ResultFragment extends Fragment {
 
     TextView tvUsername;
     TextView tvScore;
-    TextView tvQuestionNb;
     Button button;
 
-    public AnimeFragment() {
+    public ResultFragment() {
        super(R.layout.fragment_anime);
     }
 
@@ -50,6 +49,7 @@ public class AnimeFragment extends Fragment {
     public void backToMenu() {
         Intent intent = new Intent(getActivity(), ListGenre.class);
         intent.putExtra("username",tvUsername.getText().toString());
+        getActivity().finish();
         startActivity(intent);
     }
 }

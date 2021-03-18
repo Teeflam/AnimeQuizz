@@ -35,8 +35,8 @@ public class Authenticate extends AppCompatActivity {
                 editor1.putString("username", username.getText().toString());
                 editor.putString("last_user", username.getText().toString());
                 editor.commit();
-
                 myIntent.putExtra( "username",username.getText().toString());
+                finish();
                 Authenticate.this.startActivity(myIntent);
             }
         });

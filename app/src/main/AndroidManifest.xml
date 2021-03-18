@@ -14,7 +14,7 @@
         <activity android:name=".Result"></activity>
         <activity android:name=".ListGenre" />
         <activity android:name=".QuizActivity2" />
-        <activity android:name=".QuizzActivity" />
+        <activity android:name=".QuizActivity" />
         <activity android:name=".Authenticate">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name=".DifficultyChoice" />
     </application>
 
 </manifest>

@@ -26,7 +26,7 @@ public class Result extends AppCompatActivity {
         arguments.putString("score", String.valueOf(score));
         arguments.putString("questionNb", String.valueOf(questionNb));
 
-        AnimeFragment fm2 = new AnimeFragment();
+        ResultFragment fm2 = new ResultFragment();
         fm2.setArguments(arguments);
 
         fragmentTransaction.replace(R.id.fragment, fm2, null);

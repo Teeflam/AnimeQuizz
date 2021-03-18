@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MainActivity extends AppCompatActivity {
+public class DifficultyChoice extends AppCompatActivity {
     private String username;
     private String genreName;
     private int genreID;
@@ -48,14 +48,14 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (animeList.size()!=0){
                     //create an intent to change activity
-                    Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
+                    Intent myIntent = new Intent(DifficultyChoice.this, QuizActivity.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("genreID", genreID);
                     myIntent.putExtra("score", 0);
                     myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
-                    MainActivity.this.startActivity(myIntent);
+                    DifficultyChoice.this.startActivity(myIntent);
                 }
             }
         });
@@ -65,20 +65,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (animeList.size()!=0){
                     //create an intent to change activity
-                    Intent myIntent = new Intent(MainActivity.this, QuizActivity2.class);
+                    Intent myIntent = new Intent(DifficultyChoice.this, QuizActivity2.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("genreID", genreID);
                     myIntent.putExtra("score", 0);
                     myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
-                    MainActivity.this.startActivity(myIntent);
+                    DifficultyChoice.this.startActivity(myIntent);
                 }
             }
         });
     }
     public static void setAnimeList(List<Anime> animeList){
-        MainActivity.animeList = animeList;
+        DifficultyChoice.animeList = animeList;
     }
     public void initInfo(Bundle savedInstanceState){
         if (savedInstanceState == null) {

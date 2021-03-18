@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class QuizzActivity extends AppCompatActivity {
+public class QuizActivity extends AppCompatActivity {
 
     private String username;
     private int genreID;

@@ -71,7 +71,7 @@ public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObjec
                 String imageUrl = items.getJSONObject(i).getString("image_url");
                 animeList.add(new Anime(name, imageUrl));
             }
-            MainActivity.setAnimeList(animeList);
+            DifficultyChoice.setAnimeList(animeList);
             if (curr_page != num_page){
                 new AsyncAnimeJSONDataForList(animeList,curr_page = curr_page+1,num_page,genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre="+genreID+"&page=");
 

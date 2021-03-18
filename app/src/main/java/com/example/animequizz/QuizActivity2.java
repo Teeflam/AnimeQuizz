@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -26,7 +27,7 @@ import java.util.Random;
 public class QuizActivity2 extends AppCompatActivity {
 
     private String username;
-    private int difficulty;
+    private int genreID;
     private int score;
     private int questionNb;
     private List<Anime> animeList = new ArrayList<>();
@@ -159,8 +160,17 @@ public class QuizActivity2 extends AppCompatActivity {
                     score++;
                 }
                 questionNb++;
-                Intent quizActivity2 = getIntent();
 
+
+                //save score
+                SharedPreferences preferences = getSharedPreferences("SP_" + username,MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                if (preferences.getInt("genre_"+genreID+"_lvl2_score",0)<score){
+                    editor.putInt("genre_"+genreID+"_lvl2_score",score);
+                    editor.commit();
+                }
+
+                Intent quizActivity2 = getIntent();
                 quizActivity2.putExtra("score", score);
                 quizActivity2.putExtra("questionNb", questionNb);
                 finish();
@@ -170,11 +180,12 @@ public class QuizActivity2 extends AppCompatActivity {
         });
 
 
-        if(questionNb >5){
+        if(questionNb >10){
             Intent myIntent = new Intent(QuizActivity2.this, Result.class);
             myIntent.putExtra("username",username);
             myIntent.putExtra("score", score);
             myIntent.putExtra("questionNb", questionNb);
+            finish();
             QuizActivity2.this.startActivity(myIntent);
         }
 
@@ -201,6 +212,7 @@ public class QuizActivity2 extends AppCompatActivity {
                 username = extras.getString("username");
                 animeList = (List<Anime>) extras.getSerializable("animeList");
                 questionNb = extras.getInt("questionNb");
+                genreID = extras.getInt("genreID");
             }
         } else {
             username = (String) savedInstanceState.getSerializable("username");
