@@ -2,6 +2,9 @@ package com.example.animequizz;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,7 +22,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 public class QuizActivity2 extends AppCompatActivity {
 
@@ -33,7 +35,8 @@ public class QuizActivity2 extends AppCompatActivity {
     private ImageView anime_Image_A,anime_Image_B,anime_Image_C,anime_Image_D;
     private Button validation;
 
-    private Intent quizActivity2;
+    private String out;
+
     private Spinner snipper_A,snipper_B,snipper_C,snipper_D;
 
     @Override
@@ -61,6 +64,10 @@ public class QuizActivity2 extends AppCompatActivity {
         anime_Image_D = (ImageView) findViewById(R.id.anime_Image_D);
 
         validation = (Button) findViewById(R.id.validation);
+
+
+
+
 
         // (@resource) android.R.layout.simple_spinner_item:
         //   The resource ID for a layout file containing a TextView to use when instantiating views.
@@ -140,18 +147,28 @@ public class QuizActivity2 extends AppCompatActivity {
         validation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // if(snipper_A ===)
-                quizActivity2 = getIntent();
+                Intent quizActivity2 = getIntent();
                 quizActivity2.putExtra("score", score);
                 quizActivity2.putExtra("questionNb", questionNb);
                 finish();
                 startActivity(quizActivity2);
-
             }
         });
 
-
     }
+/*
+FragmentManager fm = getSupportFragmentManager ();
+                FragmentTransaction fragmentTransaction = fm.beginTransaction();
+
+                Bundle arguments = new Bundle();
+                arguments.putString("username", username);
+
+                AnimeFragment fm2 = new AnimeFragment();
+                fm2.setArguments(arguments);
+
+                fragmentTransaction.replace(R.id.fragment1, fm2, null);
+                fragmentTransaction.commit();
+ */
 
 
     private void onItemSelectedHandler(AdapterView<?> parent, View view, int position, long id) {
@@ -169,6 +186,7 @@ public class QuizActivity2 extends AppCompatActivity {
                 animeList = null;
                 questionNb = 0;
                 score = 0;
+
             } else {
                 score = extras.getInt("score");
                 username= extras.getString("username");
@@ -197,6 +215,8 @@ public class QuizActivity2 extends AppCompatActivity {
 
         return spinner;
     }
+
+
 
 
 
