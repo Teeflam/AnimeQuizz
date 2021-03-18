@@ -18,7 +18,7 @@ import java.util.List;
 
 public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, List<PresentationGenre>> {
     private ListGenre.MyAdapter adapter;
-    private static final int NB_GENRE = 10;
+    private static final int NB_GENRE = 5;
 
     public AsyncAnimeJSONDataForListGenre(ListGenre.MyAdapter adapter) {
         this.adapter = adapter;
