@@ -4,8 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -17,17 +15,14 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private String username;
+    private String genreName;
+    private int genreID;
     private TextView header;
     private static List<Anime> animeList = new ArrayList<>();
 
 
 
-    public static void setAnimeList(List<Anime> animeList){
-        MainActivity.animeList = animeList;
-        Log.i("test",MainActivity.animeList.get(0).name);
 
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,24 +33,13 @@ public class MainActivity extends AppCompatActivity {
         Button button_d1 = (Button) findViewById(R.id.stage_1);
         Button button_d2 = (Button) findViewById(R.id.stage_2);
 
-        //get the extra information sended through intent
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                username= null;
-            } else {
-                username= extras.getString("username");
-            }
-        } else {
-            username= (String) savedInstanceState.getSerializable("username");
-        }
+        initInfo(savedInstanceState);
         header.setText("Welcome " + username + ", to the Anime Quiz Game" );
 
-
-        int randomeEasy = new Random().nextInt(2)+1;
+        //random 1 to 2
+        int randomeEasy = new Random().nextInt(3)+1;
         // start the async Anime list fetching
-        new AsyncAnimeJSONDataForList().execute("https://api.jikan.moe/v3/top/anime/"+randomeEasy);
-
+        new AsyncAnimeJSONDataForList(animeList,1,3,genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre="+genreID+"&page=");
 
         // access to new activity quiz with the difficulty level
         button_d1.setOnClickListener(new View.OnClickListener() {
@@ -66,7 +50,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
-                    myIntent.putExtra("difficulty", 1);
                     myIntent.putExtra("score", 0);
                     myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
@@ -83,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent myIntent = new Intent(MainActivity.this, QuizActivity2.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
-                    myIntent.putExtra("difficulty", 2);
                     myIntent.putExtra("score", 0);
                     myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
@@ -91,5 +73,27 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    public static void setAnimeList(List<Anime> animeList){
+        MainActivity.animeList = animeList;
+    }
+    public void initInfo(Bundle savedInstanceState){
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                username= null;
+                genreName = null;
+                genreID = 0;
+            } else {
+                username= extras.getString("username");
+                genreName= extras.getString("genre");
+                genreID= extras.getInt("genreID");
+            }
+        } else {
+            username = (String) savedInstanceState.getSerializable("username");
+            genreName = (String) savedInstanceState.getSerializable("genre");
+            genreID = (int) savedInstanceState.getSerializable("genreID");
+
+        }
     }
 }

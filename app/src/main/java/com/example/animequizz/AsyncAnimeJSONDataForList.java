@@ -1,7 +1,6 @@
 package com.example.animequizz;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,7 +18,16 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObject> {
     private List<Anime> animeList = new ArrayList<>();
+    private int curr_page;
+    private int num_page;
+    private int genreID;
 
+    public AsyncAnimeJSONDataForList(List<Anime> animeList, int curr_page, int num_page, int genreID) {
+        this.animeList = animeList;
+        this.curr_page = curr_page;
+        this.num_page = num_page;
+        this.genreID = genreID;
+    }
 
     @Override
     protected JSONObject doInBackground(String... params) {
@@ -27,7 +35,7 @@ public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObjec
 
         try {
             // retrieve the url
-            URL url = new URL(params[0]);
+            URL url = new URL(params[0]+curr_page);
 
             // connect to the url
             HttpsURLConnection urlConnection = (HttpsURLConnection) url.openConnection();
@@ -51,9 +59,10 @@ public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObjec
 
     @Override
     protected void onPostExecute(JSONObject result) {
+
         try {
             // retrieve the JSON array of items
-            JSONArray items = result.getJSONArray("top");
+            JSONArray items = result.getJSONArray("results");
 
             // Loop all items
             for (int i = 0; i < items.length(); i++) {
@@ -62,7 +71,11 @@ public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObjec
                 String imageUrl = items.getJSONObject(i).getString("image_url");
                 animeList.add(new Anime(name, imageUrl));
             }
-        MainActivity.setAnimeList(animeList);
+            MainActivity.setAnimeList(animeList);
+            if (curr_page != num_page){
+                new AsyncAnimeJSONDataForList(animeList,curr_page = curr_page+1,num_page,genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre="+genreID+"&page=");
+
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

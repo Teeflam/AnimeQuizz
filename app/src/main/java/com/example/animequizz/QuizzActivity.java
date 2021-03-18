@@ -21,7 +21,6 @@ import java.util.Random;
 public class QuizzActivity extends AppCompatActivity {
 
     private String username;
-    private int difficulty;
     private int score;
     private int questionNb;
     private List<Anime> animeList = new ArrayList<>();
@@ -36,20 +35,17 @@ public class QuizzActivity extends AppCompatActivity {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
                 username= null;
-                difficulty = 0;
                 animeList = null;
                 questionNb = 0;
                 score = 0;
             } else {
                 score = extras.getInt("score");
                 username= extras.getString("username");
-                difficulty = extras.getInt("difficulty");
                 animeList = (List<Anime>) extras.getSerializable("animeList");
                 questionNb = extras.getInt("questionNb");
             }
         } else {
             username = (String) savedInstanceState.getSerializable("username");
-            difficulty = (int) savedInstanceState.getSerializable("difficulty");
             animeList = (List<Anime>) savedInstanceState.getSerializable("animeList");
         }
     }
@@ -150,10 +146,10 @@ public class QuizzActivity extends AppCompatActivity {
     }
 
     public void Randomizer(){
-        randomAnime = new Random().nextInt(49);
+        randomAnime = new Random().nextInt(animeList.size()-1);
         new AsyncBitmapDownloader(anime_image).execute(animeList.get(randomAnime).urlImage);
 
-        List<Integer> listOfAnswer = Arrays.asList(randomAnime,new Random().nextInt(49),new Random().nextInt(49),new Random().nextInt(49));
+        List<Integer> listOfAnswer = Arrays.asList(randomAnime,new Random().nextInt(animeList.size()-1),new Random().nextInt(animeList.size()-1),new Random().nextInt(animeList.size()-1));
         Collections.shuffle(listOfAnswer);
 
         response_A.setText(animeList.get(listOfAnswer.get(0)).name);
