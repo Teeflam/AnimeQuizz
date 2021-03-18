@@ -3,6 +3,7 @@ package com.example.animequizz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent myIntent = new Intent(MainActivity.this, QuizzActivity.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
+                    myIntent.putExtra("genreID", genreID);
                     myIntent.putExtra("score", 0);
                     myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
@@ -66,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent myIntent = new Intent(MainActivity.this, QuizActivity2.class);
                     //put extras informations about username and level
                     myIntent.putExtra("username", username);
+                    myIntent.putExtra("genreID", genreID);
                     myIntent.putExtra("score", 0);
                     myIntent.putExtra("questionNb", 1);
                     myIntent.putExtra("animeList", (Serializable) animeList);
@@ -94,6 +97,18 @@ public class MainActivity extends AppCompatActivity {
             genreName = (String) savedInstanceState.getSerializable("genre");
             genreID = (int) savedInstanceState.getSerializable("genreID");
 
+        }
+        SharedPreferences preferences = getSharedPreferences("SP_" + username,MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        int score1 = preferences.getInt("genre_"+genreID+"_lvl1_score",0);
+        int score2 = preferences.getInt("genre_"+genreID+"_lvl2_score",0);
+        if(score1 != 0){
+            TextView scoreLvl1 = findViewById(R.id.score_lvl1);
+            scoreLvl1.setText("RECORD : "+score1);
+        }
+        if(score2 != 0){
+            TextView scoreLvl2 = findViewById(R.id.score_lvl2);
+            scoreLvl2.setText("RECORD : "+score2);
         }
     }
 }

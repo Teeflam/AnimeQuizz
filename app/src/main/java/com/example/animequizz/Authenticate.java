@@ -23,14 +23,17 @@ public class Authenticate extends AppCompatActivity {
         final SharedPreferences.Editor editor = preferences.edit();
         EditText et =  findViewById(R.id.username);
         Button button = (Button) findViewById(R.id.getUsername);
-        et.setText(preferences.getString("username", "Anonyme"));
+        et.setText(preferences.getString("last_user", "Anonyme"));
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences preferences1 = getSharedPreferences("SP_" + username,MODE_PRIVATE);
+                SharedPreferences.Editor editor1 = preferences1.edit();
                 //go to another activity (list activity)
                 username = (TextView) findViewById(R.id.username);
                 Intent myIntent = new Intent(Authenticate.this, ListGenre.class);
-                editor.putString("username", username.getText().toString());
+                editor1.putString("username", username.getText().toString());
+                editor.putString("last_user", username.getText().toString());
                 editor.commit();
 
                 myIntent.putExtra( "username",username.getText().toString());

@@ -3,7 +3,9 @@ package com.example.animequizz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,10 +20,12 @@ import java.util.Random;
 public class QuizzActivity extends AppCompatActivity {
 
     private String username;
+    private int genreID;
     private int score;
     private int questionNb;
     private List<Anime> animeList = new ArrayList<>();
     private int randomAnime;
+
     Button response_A,response_B,response_C,response_D;
     ImageView anime_image;
     TextView tvUsername,tvScore,tvQuestionNb;
@@ -37,7 +41,8 @@ public class QuizzActivity extends AppCompatActivity {
                 score = 0;
             } else {
                 score = extras.getInt("score");
-                username= extras.getString("username");
+                username = extras.getString("username");
+                genreID = extras.getInt("genreID");
                 animeList = (List<Anime>) extras.getSerializable("animeList");
                 questionNb = extras.getInt("questionNb");
             }
@@ -156,6 +161,16 @@ public class QuizzActivity extends AppCompatActivity {
     }
 
     public void nextQuestion(Intent actual,int score, int questionNb){
+
+        //save score
+        SharedPreferences preferences = getSharedPreferences("SP_" + username,MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (preferences.getInt("genre_"+genreID+"_lvl1_score",0)<score){
+            editor.putInt("genre_"+genreID+"_lvl1_score",score);
+            editor.commit();
+        }
+
+
         quizzActivity.putExtra("score", score);
         quizzActivity.putExtra("questionNb", questionNb);
         finish();
