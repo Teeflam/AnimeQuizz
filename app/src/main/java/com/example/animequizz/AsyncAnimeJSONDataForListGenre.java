@@ -16,60 +16,58 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, List<PresentationGenre>> {
+public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, JSONObject> {
     private ListGenre.MyAdapter adapter;
-    private static final int NB_GENRE = 5;
+    private int curr_page;
+    private static final int NB_GENRE = 10;
+    private static List<String> urlList = new ArrayList<>();
+    private List<PresentationGenre> genreList = new ArrayList<>();
 
-    public AsyncAnimeJSONDataForListGenre(ListGenre.MyAdapter adapter) {
+    public AsyncAnimeJSONDataForListGenre(ListGenre.MyAdapter adapter, int curr_page) {
         this.adapter = adapter;
+        this.curr_page = curr_page;
     }
 
     @Override
-    protected List<PresentationGenre> doInBackground(String... params){
-        List<PresentationGenre> genreList = new ArrayList<>();
-        List<String> urlList = new ArrayList<>();
+    protected JSONObject doInBackground(String... params){
+
         //url with Json format
         String stringUrl;
         JSONObject jsonObject = null;
-
-        for (int i=1;i<NB_GENRE+1;i++) {
-
-            stringUrl = params[0]+i+"/1";
-            Log.i("item 0:", stringUrl);
-            jsonObject = HttpConnection(stringUrl);
-            if (jsonObject != null) {
-                try {
-                    int index = 0;
-                    String urlImage = jsonObject.getJSONArray("anime").getJSONObject(index).getString("image_url");
-                    String genreName = jsonObject.getJSONObject("mal_url").getString("name");
-                    Log.i("item 0:", urlImage);
-                    Log.i("item 0:", genreName);
-                    while (urlList.contains(urlImage)){
-                        index++;
-                        urlImage = jsonObject.getJSONArray("anime").getJSONObject(index).getString("image_url");
-                    }
-                    urlList.add(urlImage);
-                    genreList.add(new PresentationGenre(genreName,urlImage,i));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                i--;
-                Log.e("Error", "Error: jsonObject is null");
-            }
-        }
-        return genreList;
+        stringUrl = params[0]+curr_page+"/1";
+        Log.i("item 0:", stringUrl);
+        jsonObject = HttpConnection(stringUrl);
+        return jsonObject;
     }
-    protected void onPostExecute(List<PresentationGenre> result) {
+    protected void onPostExecute(JSONObject jsonObject) {
 
-        if (result != null){
-            for (int i = 0; i < result.size(); i++) {
-                adapter.dd(result.get(i));
+        String stringUrl = "https://api.jikan.moe/v3/genre/anime/";
+
+        if (jsonObject != null) {
+            try {
+                int index = 0;
+                String urlImage = jsonObject.getJSONArray("anime").getJSONObject(index).getString("image_url");
+                String genreName = jsonObject.getJSONObject("mal_url").getString("name");
+                Log.i("item 0:", urlImage);
+                Log.i("item 0:", genreName);
+                //find an unique image to avoid doublon
+                while (urlList.contains(urlImage)){
+                    index++;
+                    urlImage = jsonObject.getJSONArray("anime").getJSONObject(index).getString("image_url");
+                }
+                urlList.add(urlImage);
+
+                adapter.dd(new PresentationGenre(genreName,urlImage,curr_page));
+                adapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            //set notifyDataSetChanged to the adapter
-            adapter.notifyDataSetChanged();
-        }else{
+        } else {
+            curr_page--;
             Log.e("Error", "Error: jsonObject is null");
+        }
+        if (curr_page != NB_GENRE){
+            new AsyncAnimeJSONDataForListGenre(adapter,curr_page = curr_page+1).execute(stringUrl);
         }
     }
     private String readStream(InputStream is) throws IOException {

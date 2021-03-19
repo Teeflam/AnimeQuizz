@@ -43,7 +43,7 @@ public class ListGenre extends AppCompatActivity {
 
         lv.setAdapter(adapter);
         url = "https://api.jikan.moe/v3/genre/anime/";
-        AsyncAnimeJSONDataForListGenre asyncTaskList = new AsyncAnimeJSONDataForListGenre(adapter);
+        AsyncAnimeJSONDataForListGenre asyncTaskList = new AsyncAnimeJSONDataForListGenre(adapter,1);
         asyncTaskList.execute(url);
     }
     public class MyAdapter extends BaseAdapter {
