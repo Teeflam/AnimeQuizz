@@ -1,6 +1,7 @@
 package com.example.animequizz;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,7 +18,7 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObject> {
-    private List<Anime> animeList = new ArrayList<>();
+    private List<Anime> animeList;
     private int curr_page;
     private int num_page;
     private int genreID;
@@ -73,8 +74,8 @@ public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObjec
             }
             DifficultyChoice.setAnimeList(animeList);
             if (curr_page != num_page){
-                new AsyncAnimeJSONDataForList(animeList,curr_page = curr_page+1,num_page,genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre="+genreID+"&page=");
-
+                int next_page = curr_page + 1;
+                new AsyncAnimeJSONDataForList(animeList,next_page,num_page,genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre="+genreID+"&page=");
             }
         } catch (JSONException e) {
             e.printStackTrace();

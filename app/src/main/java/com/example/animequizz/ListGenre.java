@@ -3,6 +3,7 @@ package com.example.animequizz;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -21,28 +23,24 @@ import com.android.volley.toolbox.ImageRequest;
 import java.util.Vector;
 
 public class ListGenre extends AppCompatActivity {
+    // attributes
     private String username;
+    private MyAdapter adapter;
+    // layout items
+    private ListView lv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_genre);
-        ListView lv = (ListView) findViewById(R.id.listGenre);
+        // init value
         String url;
-        MyAdapter adapter = new MyAdapter();
-        //get the extra information sended through intent
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras == null) {
-                username= null;
-            } else {
-                username= extras.getString("username");
-            }
-        } else {
-            username= (String) savedInstanceState.getSerializable("username");
-        }
-
+        lv = (ListView) findViewById(R.id.listGenre);
+        adapter = new MyAdapter();
         lv.setAdapter(adapter);
         url = "https://api.jikan.moe/v3/genre/anime/";
+        initInfo(savedInstanceState);
+        // create new async task to fill list view
         AsyncAnimeJSONDataForListGenre asyncTaskList = new AsyncAnimeJSONDataForListGenre(adapter,1);
         asyncTaskList.execute(url);
     }
@@ -74,7 +72,7 @@ public class ListGenre extends AppCompatActivity {
                 LayoutInflater inflater = LayoutInflater.from(parent.getContext());
                 convertView = inflater.inflate(R.layout.bitmap_layout, parent, false);
             }
-
+            // set button content
             Button button = (Button) convertView.findViewById(R.id.button);
             final String genre = vector.get(position).getGenreName();
             final int genreID = vector.get(position).getGenreNum();
@@ -82,6 +80,7 @@ public class ListGenre extends AppCompatActivity {
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // put extra info and launch new activity
                     Intent myIntent = new Intent(ListGenre.this, DifficultyChoice.class);
                     myIntent.putExtra( "username",username);
                     myIntent.putExtra( "genre",genre);
@@ -89,6 +88,7 @@ public class ListGenre extends AppCompatActivity {
                     ListGenre.this.startActivity(myIntent);
                 }
             });
+            // set image view content
             final ImageView iv = (ImageView) convertView.findViewById(R.id.imageView);
             ImageRequest ir = new ImageRequest(vector.get(position).getImageUrl(), new Response.Listener<Bitmap>() {
                 @Override
@@ -109,10 +109,22 @@ public class ListGenre extends AppCompatActivity {
 
             return convertView;
         }
+        // add a new element in vector
         public void dd(PresentationGenre pg){
-            //Log.i("JFL", "Adding to adapter url : " + pg.getImageUrl() +" "+pg.getGenreName());
-
             vector.add(pg);
+        }
+    }
+    // init value from intent
+    public void initInfo(Bundle savedInstanceState){
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                username= null;
+            } else {
+                username= extras.getString("username");
+            }
+        } else {
+            username = (String) savedInstanceState.getSerializable("username");
         }
     }
 }

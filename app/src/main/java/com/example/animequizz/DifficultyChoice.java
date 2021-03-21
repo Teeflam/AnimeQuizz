@@ -15,30 +15,25 @@ import java.util.List;
 import java.util.Random;
 
 public class DifficultyChoice extends AppCompatActivity {
+    // attributes
     private String username;
     private String genreName;
     private int genreID;
+    // layout items
     private TextView header;
-    private static List<Anime> animeList = new ArrayList<>();
-
-
-
-
+    private static List<Anime> animeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        // init value
         header = (TextView) findViewById(R.id.header);
         Button button_d1 = (Button) findViewById(R.id.stage_1);
         Button button_d2 = (Button) findViewById(R.id.stage_2);
-
         initInfo(savedInstanceState);
         header.setText("Welcome " + username + ", to the Anime Quiz Game" );
 
-        //random 1 to 2
-        int randomeEasy = new Random().nextInt(3)+1;
         // start the async Anime list fetching
         new AsyncAnimeJSONDataForList(animeList,1,3,genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre="+genreID+"&page=");
 
@@ -49,7 +44,7 @@ public class DifficultyChoice extends AppCompatActivity {
                 if (animeList.size()!=0){
                     //create an intent to change activity
                     Intent myIntent = new Intent(DifficultyChoice.this, QuizActivity.class);
-                    //put extras informations about username and level
+                    //put extras informations needed
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("genreID", genreID);
                     myIntent.putExtra("score", 0);
@@ -66,7 +61,7 @@ public class DifficultyChoice extends AppCompatActivity {
                 if (animeList.size()!=0){
                     //create an intent to change activity
                     Intent myIntent = new Intent(DifficultyChoice.this, QuizActivity2.class);
-                    //put extras informations about username and level
+                    //put extras informations needed
                     myIntent.putExtra("username", username);
                     myIntent.putExtra("genreID", genreID);
                     myIntent.putExtra("score", 0);
@@ -77,10 +72,13 @@ public class DifficultyChoice extends AppCompatActivity {
             }
         });
     }
+    // setter of anime list
     public static void setAnimeList(List<Anime> animeList){
         DifficultyChoice.animeList = animeList;
     }
+    // init extras info from intent and preferences
     public void initInfo(Bundle savedInstanceState){
+        animeList = new ArrayList<>();
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -98,14 +96,17 @@ public class DifficultyChoice extends AppCompatActivity {
             genreID = (int) savedInstanceState.getSerializable("genreID");
 
         }
+        // show preferences info about saved score
         SharedPreferences preferences = getSharedPreferences("SP_" + username,MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         int score1 = preferences.getInt("genre_"+genreID+"_lvl1_score",0);
         int score2 = preferences.getInt("genre_"+genreID+"_lvl2_score",0);
+        //set score for difficulty 1
         if(score1 != 0){
             TextView scoreLvl1 = findViewById(R.id.score_lvl1);
             scoreLvl1.setText("RECORD : "+score1);
         }
+        //set score for difficulty 1
         if(score2 != 0){
             TextView scoreLvl2 = findViewById(R.id.score_lvl2);
             scoreLvl2.setText("RECORD : "+score2);
