@@ -7,15 +7,35 @@ import androidx.fragment.app.FragmentTransaction;
 import android.os.Bundle;
 
 public class Result extends AppCompatActivity {
+    // Attribut
     private String username;
     private int score;
-    private int questionNb;
+
+    // Initializing info sended from the intent
+    public void initInfo(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                username = null;
+
+                score = 0;
+
+            } else {
+                score = extras.getInt("score");
+                username = extras.getString("username");
+
+            }
+        } else {
+            username = (String) savedInstanceState.getSerializable("username");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
 
+        // Initialize info
         initInfo(savedInstanceState);
 
         FragmentManager fm = getSupportFragmentManager ();
@@ -24,31 +44,13 @@ public class Result extends AppCompatActivity {
         Bundle arguments = new Bundle();
         arguments.putString("username", username);
         arguments.putString("score", String.valueOf(score));
-        arguments.putString("questionNb", String.valueOf(questionNb));
 
         ResultFragment fm2 = new ResultFragment();
         fm2.setArguments(arguments);
-
+        // Send the info to the fragment layout
         fragmentTransaction.replace(R.id.fragment, fm2, null);
         fragmentTransaction.commit();
 
     }
 
-    public void initInfo(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                username = null;
-                questionNb = 0;
-                score = 0;
-
-            } else {
-                score = extras.getInt("score");
-                username = extras.getString("username");
-                questionNb = extras.getInt("questionNb");
-            }
-        } else {
-            username = (String) savedInstanceState.getSerializable("username");
-        }
-    }
 }

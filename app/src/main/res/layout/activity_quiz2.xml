@@ -50,7 +50,7 @@
 
                 <ImageView
                     android:id="@+id/anime_Image_A"
-                    android:layout_width="142dp"
+                    android:layout_width="0dp"
                     android:layout_height="143dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -68,7 +68,7 @@
 
                 <ImageView
                     android:id="@+id/anime_Image_B"
-                    android:layout_width="142dp"
+                    android:layout_width="0dp"
                     android:layout_height="143dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -86,7 +86,7 @@
 
                 <ImageView
                     android:id="@+id/anime_Image_C"
-                    android:layout_width="142dp"
+                    android:layout_width="0dp"
                     android:layout_height="143dp"
                     android:layout_weight="1"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
@@ -104,10 +104,11 @@
 
                 <ImageView
                     android:id="@+id/anime_Image_D"
-                    android:layout_width="142dp"
+                    android:layout_width="0dp"
                     android:layout_height="143dp"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_launcher_foreground" />
+                    app:srcCompat="@drawable/ic_launcher_foreground"
+                    android:contentDescription="TODO" />
 
                 <Spinner
                     android:id="@+id/snipper_D"
@@ -120,13 +121,7 @@
                 android:id="@+id/validation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Button" />
-
-            <LinearLayout
-                android:id="@+id/fragment1"
-                android:layout_width="446dp"
-                android:layout_height="20dp"
-                android:orientation="vertical"></LinearLayout>
+                android:text="@string/validation" />
 
         </LinearLayout>
     </ScrollView>

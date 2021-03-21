@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 
 public class ResultFragment extends Fragment {
-
+    // Attirbut
     TextView tvUsername;
     TextView tvScore;
     Button button;
@@ -22,16 +22,16 @@ public class ResultFragment extends Fragment {
        super(R.layout.fragment_anime);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_anime, container, false);
         return view;
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        // Setup any handles to view objects here
+        // Set to var to the item of the layout
         tvUsername = (TextView) view.findViewById(R.id.fragmentUsername);
         tvScore= (TextView) view.findViewById(R.id.fragmentScore);
         button = (Button) view.findViewById(R.id.back_to_menu);
@@ -46,6 +46,8 @@ public class ResultFragment extends Fragment {
             }
         });
     }
+
+    // Back to the ListGenre activity
     public void backToMenu() {
         Intent intent = new Intent(getActivity(), ListGenre.class);
         intent.putExtra("username",tvUsername.getText().toString());

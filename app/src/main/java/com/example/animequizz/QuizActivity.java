@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 public class QuizActivity extends AppCompatActivity {
-
+    // Attribut
     private String username;
     private int genreID;
     private int score;
@@ -26,11 +26,13 @@ public class QuizActivity extends AppCompatActivity {
     private List<Anime> animeList = new ArrayList<>();
     private int randomAnime;
 
+    // Layout item
     Button response_A,response_B,response_C,response_D;
     ImageView anime_image;
     TextView tvUsername,tvScore,tvQuestionNb;
     Intent quizzActivity;
 
+    // Initializing info sended from the intent
     public void initInfo(Bundle savedInstanceState){
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -57,14 +59,15 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quizz);
 
-        // init
+        // initialize info
+        initInfo(savedInstanceState);
+
+        // Set to var to the item of the layout
         response_A = (Button) findViewById(R.id.response_A);
         response_B = (Button) findViewById(R.id.response_B);
         response_C = (Button) findViewById(R.id.response_C);
         response_D = (Button) findViewById(R.id.response_D);
         anime_image = (ImageView) findViewById(R.id.anime_image);
-
-        initInfo(savedInstanceState);
 
         tvUsername = (TextView) findViewById(R.id.username);
         tvScore = (TextView) findViewById(R.id.score);
@@ -75,6 +78,7 @@ public class QuizActivity extends AppCompatActivity {
         tvQuestionNb.setText("question : " +String.valueOf(questionNb));
 
         Randomizer();
+
         response_A.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,14 +148,24 @@ public class QuizActivity extends AppCompatActivity {
 
             }
         });
+        // End of the quizz
+        if(questionNb >10){
+            Intent myIntent = new Intent(QuizActivity.this, Result.class);
+            myIntent.putExtra("username",username);
+            myIntent.putExtra("score", score);
+            myIntent.putExtra("questionNb", questionNb);
+            finish();
+            QuizActivity.this.startActivity(myIntent);
+        }
 
     }
-
+    // Get Random anime for the quizz
     public void Randomizer(){
         randomAnime = new Random().nextInt(animeList.size()-1);
         new AsyncBitmapDownloader(anime_image).execute(animeList.get(randomAnime).urlImage);
 
         List<Integer> listOfAnswer = Arrays.asList(randomAnime,new Random().nextInt(animeList.size()-1),new Random().nextInt(animeList.size()-1),new Random().nextInt(animeList.size()-1));
+        // Shuffle the list to have random position
         Collections.shuffle(listOfAnswer);
 
         response_A.setText(animeList.get(listOfAnswer.get(0)).name);
@@ -160,6 +174,7 @@ public class QuizActivity extends AppCompatActivity {
         response_D.setText(animeList.get(listOfAnswer.get(3)).name);
     }
 
+    // go to the next question
     public void nextQuestion(Intent actual,int score, int questionNb){
 
         //save score

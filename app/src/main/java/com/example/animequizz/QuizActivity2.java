@@ -25,28 +25,52 @@ import java.util.List;
 import java.util.Random;
 
 public class QuizActivity2 extends AppCompatActivity {
-
+    // Attribut
     private String username;
     private int genreID;
     private int score;
     private int questionNb;
     private List<Anime> animeList = new ArrayList<>();
+    private List<Anime> fourAnime = new ArrayList<>();
 
+    // Layout item
     private TextView tvUsername, tvScore, tvQuestionNb;
     private ImageView anime_Image_A, anime_Image_B, anime_Image_C, anime_Image_D;
     private Button validation;
-
-    private List<Anime> fourAnime = new ArrayList<>();
-    private String response_A, response_B, response_C, response_D;
-
     private Spinner snipper_A, snipper_B, snipper_C, snipper_D;
+
+
+    // Initializing info sended from the intent
+    public void initInfo(Bundle savedInstanceState) {
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                username = null;
+                animeList = null;
+                questionNb = 0;
+                score = 0;
+            } else {
+                score = extras.getInt("score");
+                username = extras.getString("username");
+                animeList = (List<Anime>) extras.getSerializable("animeList");
+                questionNb = extras.getInt("questionNb");
+                genreID = extras.getInt("genreID");
+            }
+        } else {
+            username = (String) savedInstanceState.getSerializable("username");
+            animeList = (List<Anime>) savedInstanceState.getSerializable("animeList");
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz2);
+
+        // initialize info
         initInfo(savedInstanceState);
 
+        // Set to var to the item of the layout
         tvUsername = (TextView) findViewById(R.id.username);
         tvScore = (TextView) findViewById(R.id.score);
         tvQuestionNb = (TextView) findViewById(R.id.questionNb);
@@ -67,11 +91,11 @@ public class QuizActivity2 extends AppCompatActivity {
 
         validation = (Button) findViewById(R.id.validation);
 
+        // get 4 random anime from the list
         fourAnime = randomAnime(animeList);
 
 
-        //   The resource ID for a layout file containing a TextView to use when instantiating views.
-        //    (Layout for one ROW of Spinner)
+        // Layout for one ROW of Spinner
         ArrayAdapter<String> adapterA = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item,
                 Randomizer(anime_Image_A,0));
@@ -86,7 +110,7 @@ public class QuizActivity2 extends AppCompatActivity {
                 android.R.layout.simple_spinner_item,
                 Randomizer(anime_Image_D,3));
 
-        // Layout for All ROWs of Spinner.  (Optional for ArrayAdapter).
+        // Layout for All ROWs of Spinner.
         adapterA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapterB.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapterC.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -147,7 +171,7 @@ public class QuizActivity2 extends AppCompatActivity {
             }
         });
 
-
+        // Validation of the answer
         validation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,7 +203,7 @@ public class QuizActivity2 extends AppCompatActivity {
             }
         });
 
-
+        // End of the quizz
         if(questionNb >10){
             Intent myIntent = new Intent(QuizActivity2.this, Result.class);
             myIntent.putExtra("username",username);
@@ -191,41 +215,18 @@ public class QuizActivity2 extends AppCompatActivity {
 
     }
 
-
-
     private void onItemSelectedHandler(AdapterView<?> parent, View view, int position, long id) {
         String item = parent.getItemAtPosition(position).toString();
     }
 
-
-    public void initInfo(Bundle savedInstanceState) {
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if (extras == null) {
-                username = null;
-                animeList = null;
-                questionNb = 0;
-                score = 0;
-
-            } else {
-                score = extras.getInt("score");
-                username = extras.getString("username");
-                animeList = (List<Anime>) extras.getSerializable("animeList");
-                questionNb = extras.getInt("questionNb");
-                genreID = extras.getInt("genreID");
-            }
-        } else {
-            username = (String) savedInstanceState.getSerializable("username");
-            animeList = (List<Anime>) savedInstanceState.getSerializable("animeList");
-        }
-    }
-
+    // Get Random anime for the quizz and a set of answer in a spinner
     public List<String> Randomizer(ImageView anime_Image,int number) {
         List<String> spinner = new ArrayList<>();
 
         new AsyncBitmapDownloader(anime_Image).execute(fourAnime.get(number).urlImage);
 
         List<Integer> listOfAnswer = Arrays.asList(0,1,2,3);
+        // shuffle the list
         Collections.shuffle(listOfAnswer);
 
         spinner.add(fourAnime.get(listOfAnswer.get(0)).name);
@@ -236,6 +237,7 @@ public class QuizActivity2 extends AppCompatActivity {
         return spinner;
     }
 
+    // get random anime
     public List<Anime> randomAnime(List<Anime> animelist) {
         List<Anime> listAnswer = new ArrayList<>();
         if (animelist != null) {
