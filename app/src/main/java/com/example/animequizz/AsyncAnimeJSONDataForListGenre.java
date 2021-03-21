@@ -22,7 +22,7 @@ public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, JSONO
     private int curr_page;
     private static final int NB_GENRE = 5;
     private static List<String> urlList = new ArrayList<>();
-    private List<PresentationGenre> genreList = new ArrayList<>();
+
     // constructor
     public AsyncAnimeJSONDataForListGenre(ListGenre.MyAdapter adapter, int curr_page) {
         this.adapter = adapter;
@@ -39,6 +39,7 @@ public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, JSONO
         jsonObject = HttpConnection(stringUrl);
         return jsonObject;
     }
+
     protected void onPostExecute(JSONObject jsonObject) {
         // common url
         String stringUrl = "https://api.jikan.moe/v3/genre/anime/";
@@ -49,13 +50,13 @@ public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, JSONO
                 String urlImage = jsonObject.getJSONArray("anime").getJSONObject(index).getString("image_url");
                 String genreName = jsonObject.getJSONObject("mal_url").getString("name");
                 Log.i("item 0:", urlImage);
-                Log.i("item 0:", genreName);
                 //find an unique image to avoid doublon
                 while (urlList.contains(urlImage) || index > 10){
                     index++;
                     urlImage = jsonObject.getJSONArray("anime").getJSONObject(index).getString("image_url");
                 }
                 urlList.add(urlImage);
+
                 // add to adapter
                 adapter.dd(new PresentationGenre(genreName,urlImage,curr_page));
                 adapter.notifyDataSetChanged();
@@ -101,4 +102,10 @@ public class AsyncAnimeJSONDataForListGenre extends AsyncTask<String,Void, JSONO
         }
         return jsonObject;
     }
+
+    // Setter
+    public static void setUrlList(List<String> urlList) {
+        AsyncAnimeJSONDataForListGenre.urlList = urlList;
+    }
+
 }

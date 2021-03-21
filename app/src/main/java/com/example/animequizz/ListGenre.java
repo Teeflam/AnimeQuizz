@@ -20,12 +20,14 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class ListGenre extends AppCompatActivity {
     // attributes
     private String username;
     private MyAdapter adapter;
+    private AsyncAnimeJSONDataForListGenre asyncTaskList;
     // layout items
     private ListView lv;
 
@@ -41,7 +43,7 @@ public class ListGenre extends AppCompatActivity {
         url = "https://api.jikan.moe/v3/genre/anime/";
         initInfo(savedInstanceState);
         // create new async task to fill list view
-        AsyncAnimeJSONDataForListGenre asyncTaskList = new AsyncAnimeJSONDataForListGenre(adapter,1);
+        asyncTaskList = new AsyncAnimeJSONDataForListGenre(adapter,1);
         asyncTaskList.execute(url);
     }
     public class MyAdapter extends BaseAdapter {
@@ -85,6 +87,8 @@ public class ListGenre extends AppCompatActivity {
                     myIntent.putExtra( "username",username);
                     myIntent.putExtra( "genre",genre);
                     myIntent.putExtra( "genreID",genreID);
+                    // reset the urlList for each genre
+                    asyncTaskList.setUrlList(new ArrayList<String>());
                     ListGenre.this.startActivity(myIntent);
                 }
             });

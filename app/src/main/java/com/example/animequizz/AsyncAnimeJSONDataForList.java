@@ -12,7 +12,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -60,26 +59,35 @@ public class AsyncAnimeJSONDataForList extends AsyncTask<String, Void, JSONObjec
 
     @Override
     protected void onPostExecute(JSONObject result) {
+        if (result != null) {
+            try {
+                // retrieve the JSON array of items
+                JSONArray items = result.getJSONArray("results");
 
-        try {
-            // retrieve the JSON array of items
-            JSONArray items = result.getJSONArray("results");
+                // Loop all items
+                for (int i = 0; i < items.length(); i++) {
+                    // retrieve the image url
+                    String name = items.getJSONObject(i).getString("title");
+                    String imageUrl = items.getJSONObject(i).getString("image_url");
+                    animeList.add(new Anime(name, imageUrl));
+                }
+                DifficultyChoice.setAnimeList(animeList);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-            // Loop all items
-            for (int i = 0; i < items.length(); i++) {
-                // retrieve the image url
-                String name = items.getJSONObject(i).getString("title");
-                String imageUrl = items.getJSONObject(i).getString("image_url");
-                animeList.add(new Anime(name, imageUrl));
-            }
-            DifficultyChoice.setAnimeList(animeList);
-            if (curr_page != num_page){
-                int next_page = curr_page + 1;
-                new AsyncAnimeJSONDataForList(animeList,next_page,num_page,genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre="+genreID+"&page=");
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
+        else{
+            // jsonObject is null so re ask data for the same URL
+            curr_page--;
+            Log.e("Error", "Error:  jsonObject is null");
+        }
+        // Launch a new asynTask for the next page
+        if (curr_page != num_page) {
+            int next_page = curr_page + 1;
+            new AsyncAnimeJSONDataForList(animeList, next_page, num_page, genreID).execute("https://api.jikan.moe/v3/search/anime?q=&order_by=members&sort=desc&genre=" + genreID + "&page=");
+        }
+
     }
 
     private String readStream(InputStream is) {
